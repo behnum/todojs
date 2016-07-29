@@ -20,7 +20,7 @@ $(document).ready(function(){
   });
 
   $('li').on('click', function(){
-      var item = $(this).text().replace(/ /g, "-");
+      var item = $(this).text().replace(/ /g, "-"); // replace speces with hyphen
       $.ajax({
         type: 'DELETE',
         url: '/todo/' + item,
