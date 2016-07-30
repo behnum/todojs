@@ -4,22 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <title>TodoJS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/normalize.css">
   <link rel="stylesheet" href="/assets/styles.css">
 </head>
 
 <body>
 
   <div id="todo-table">
-    <form action="#">
-      <input type="text" name="item" placeholder="Add new item..." required />
-      <button type="submit">Add Item</button>
+    <img id="logo" src="/assets/todojs-logo.svg" alt="TodoJS">
+    <form id="taskForm" action="#">
+      <input id="taskInput" type="text" name="item" placeholder="Add new item..." required autofocus /><button id="taskAdd" type="submit">Add</button>
     </form>
-    <ul>
+    <ul id="taskList">
       <% for(var i=0; i < todos.length; i++) { %>
         <li><%= todos[i].item %></li>
         <%}%>
     </ul>
   </div>
+  <footer>
+    Made with &hearts; by <a href="https://twitter.com/baharmand">Behnam Baharmand</a>.
+  </footer>
 
   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
       crossorigin="anonymous"></script>
