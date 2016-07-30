@@ -24,6 +24,8 @@ $(document).ready(function () {
   $('li').on('click', function () {
 
     var item = $(this).text().replace(/ /g, "-"); // replace speces with hyphen
+    item = encodeURIComponent(item); // Dealing with special chars like question mark
+
     $.ajax({
       type: 'DELETE',
       url: '/todo/' + item,
