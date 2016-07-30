@@ -1,34 +1,54 @@
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
-var urlencodedParser = bodyParser.urlencoded({extended: false});
+var urlencodedParser = bodyParser.urlencoded({
+  extended: false
+});
 
-var data = [
-  {item: 'Do Homework'},
-  {item: 'Go Shopping'},
-  {item: 'Eat Cake'}
-];
+// Connect to the database
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/todojs');
 
-module.exports = function(app) {
+// *** Establish a Todo model
+var Todo = mongoose.model('Todo', {
+  item: String
+});
 
-  app.get('/', function(req, res) {
+module.exports = function (app) {
+
+  // A static welcome page (todo: to be implemented)
+  app.get('/', function (req, res) {
     res.render('welcome');
   });
 
-  app.get('/todo', function(req, res) {
-    res.render('todo', {todos: data});
-  });
-
-  app.post('/todo', urlencodedParser, function(req, res) {
-    data.push(req.body);
-    res.json(data);
-  });
-
-  app.delete('/todo/:item', function(req, res) {
-    data = data.filter(function(todo) {
-      return todo.item.replace(/ /g, '-') !== req.params.item;
+  // TodoJS Homepage
+  app.get('/todo', function (req, res) {
+    Todo.find({}, function (err, data) {
+      if (err) throw err;
+      res.render('todo', {
+        todos: data
+      });
     });
-    
-    res.json(data);
+  });
+
+  // Add a Tasks via $.ajax (todo-list.js)
+  app.post('/todo', urlencodedParser, function (req, res) {
+    var newTodo = Todo(req.body).save(function (err, data) {
+      if (err) throw err;
+
+      res.json(data);
+    });
+  });
+
+  // Delete a Task via $.ajax (todo-list.js)
+  app.delete('/todo/:item', function (req, res) {
+    Todo.find({
+      item: req.params.item.replace(/\-/g, " ")
+    }).remove(function (err, data) {
+      if (err) throw err;
+
+      res.json(data);
+    });
   });
 
 };
